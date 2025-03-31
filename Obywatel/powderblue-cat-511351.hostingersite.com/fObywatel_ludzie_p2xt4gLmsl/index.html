@@ -92,6 +92,30 @@
 
 <button id="install-button" style="display: none;">Zainstaluj PWA</button>
 
+<script>
+  let deferredPrompt; // Zmienna do przechowania eventu instalacji
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault(); // Zapobiega domyślnemu oknu instalacji
+    deferredPrompt = event; // Przechowuje event do późniejszego użycia
+    document.getElementById("install-button").style.display = "block"; // Pokazuje przycisk
+  });
+
+  document.getElementById("install-button").addEventListener("click", () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Uruchamia okno instalacji
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("Użytkownik zainstalował PWA");
+        } else {
+          console.log("Użytkownik anulował instalację");
+        }
+        deferredPrompt = null; // Czyścimy zmienną po użyciu
+      });
+    }
+  });
+</script>
+
 </body>
 <!-- Mirrored from powderblue-cat-511351.hostingersite.com/fObywatel_ludzie_p2xt4gLmsl/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 29 Mar 2025 15:55:53 GMT -->
 </html>
